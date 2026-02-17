@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Detalle | SIMCREW.CL</title>
+</head>
+<body class="bg-gray-900 text-white font-sans overflow-x-hidden">
+
+    <nav class="flex justify-between items-center p-6 bg-black border-b border-orange-600 sticky top-0 z-40">
+        <a href="SimCrew.html" class="text-2xl font-bold tracking-tighter text-orange-500 uppercase">SIMCREW<span class="text-white">.CL</span></a>
+        <span id="carrito-contador" class="bg-orange-600 px-3 py-1 rounded-full text-sm font-bold cursor-pointer">🛒 (0)</span>
+    </nav>
+
+    <main class="container mx-auto px-6 py-12 md:py-20 flex flex-col md:flex-row gap-12">
+        <div class="md:w-1/2 bg-black rounded-3xl p-8 border border-gray-800 flex items-center justify-center">
+            <img id="det-img" src="" alt="Cargando..." class="max-w-full h-auto rounded-xl">
+        </div>
+        <div class="md:w-1/2">
+            <p id="det-cat" class="text-orange-500 font-black uppercase tracking-widest text-xs mb-4"></p>
+            <h1 id="det-nombre" class="text-4xl md:text-6xl font-black italic uppercase mb-6 tracking-tighter"></h1>
+            <p id="det-desc" class="text-gray-400 text-lg mb-8 leading-relaxed font-light"></p>
+            <div id="det-precio" class="text-4xl font-black mb-10 italic text-white"></div>
+            <button id="btn-comprar" class="w-full md:w-auto bg-orange-600 hover:bg-white hover:text-black text-white px-12 py-5 rounded-2xl font-black transition-all duration-300 uppercase italic tracking-widest">
+                Añadir al Carrito
+            </button>
+        </div>
+    </main>
+
+    <div id="carrito-drawer" class="fixed inset-y-0 right-0 w-full md:w-96 bg-black border-l border-orange-600 z-50 transform translate-x-full transition-transform duration-300 ease-in-out">
+        <div class="flex flex-col h-full p-6">
+            <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+                <h2 class="text-2xl font-black italic text-orange-500 uppercase">Tu Carro</h2>
+                <button onclick="toggleCarrito()" class="text-white text-3xl">&times;</button>
+            </div>
+            <div id="carrito-items" class="flex-grow overflow-y-auto py-4"></div>
+            <div class="border-t border-gray-800 pt-6">
+                <div class="flex justify-between mb-4"><span class="text-gray-400 uppercase font-bold text-xs">Total</span><span id="carrito-total" class="text-2xl font-black">$0</span></div>
+                <button onclick="enviarPedidoGmail()" class="w-full bg-orange-600 py-4 font-black uppercase italic rounded-xl">Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="carrito-overlay" class="fixed inset-0 bg-black/60 z-40 hidden backdrop-blur-sm"></div>
+
+    <script src="productos.js"></script>
+    <script src="carrito.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            const p = productosDB.find(item => item.id === id);
+
+            if (p) {
+                document.getElementById('det-img').src = p.imagen;
+                document.getElementById('det-nombre').innerText = p.nombre;
+                document.getElementById('det-desc').innerText = p.descripcion;
+                document.getElementById('det-cat').innerText = p.categoria;
+                document.getElementById('det-precio').innerText = `$${p.precio.toLocaleString('es-CL')}`;
+                document.getElementById('btn-comprar').onclick = () => agregarAlCarrito(p.nombre, p.precio);
+            } else {
+                window.location.href = 'SimCrewCATALOGO.html';
+            }
+        });
+    </script>
+</body>
+</html>
